@@ -239,8 +239,8 @@ var GameScene = cc.Scene.extend({
 		Sound._playSelect();
 		var mMerge = false;
 		
-		for (var j = 0; j < Constants.MAP_COLUMN; j++) {
-			for (var i = 0; i < Constants.MAP_ROW; i++) {
+		for (var j = 0; j < Constants.MAP_ROW; j++) {
+			for (var i = 0; i < Constants.MAP_COLUMN; i++) {
 				for (var i2 = i + 1; i2 < Constants.MAP_COLUMN; i2++) {
 					if (this._map[i2][j].getCardNum() > 0) {
 						if (this._map[i][j].getCardNum() == 0) {
@@ -284,22 +284,154 @@ var GameScene = cc.Scene.extend({
 		}
 	},
 	
+	//右移,y轴不变
 	toRight:function() {
 		Sound._playSelect();
-		this._addRandomNum();
-		cc.log("right");
+		var mMerge = false;
+		
+		for (var j = 0; j < Constants.MAP_ROW; j ++) {
+			for (var i = Constants.MAP_COLUMN - 1; i >= 0; i--) {
+				for (var i2 = i - 1; i2 >= 0; i2--) {
+					if (this._map[i2][j].getCardNum() > 0) {
+						if (this._map[i][j].getCardNum() == 0) {
+							this._map[i][j].setCardNum(this._map[i2][j].getCardNum());
+							//this._map[i][j]._showBrake("left");
+							if (this._map[i][j].getCardNum() == 0) {
+								this._txtMap[i][j].setString("");
+							} else {
+								this._txtMap[i][j].setString(this._map[i2][j].getCardNum());
+								this._txtMap[i][j].setColor(cc.color(0, 0, 0));
+							}
+							
+							this._map[i2][j].setCardNum(Constants.CARD_0);
+							this._txtMap[i2][j].setString("");
+							mMerge = true;
+							i--;
+						} else if (this._map[i][j].getCardNum() == this._map[i2][j].getCardNum()) {
+							var mergeNum = parseInt(this._map[i][j].getCardNum());
+							this._map[i][j].setCardNum(mergeNum * 2);
+							this._map[i][j]._showBlink();
+							this._txtMap[i][j].setString(mergeNum * 2);
+							this._txtMap[i][j].setColor(cc.color(0,0,0));
+							this._mergeAction(this._map[i][j]);
+							
+							this._map[i2][j].setCardNum(Constants.CARD_0);
+							this._txtMap[i2][j].setString("");
+							//添加当前分数
+							this._score = this._map[i][j].getCardNum();
+							this._recordText.setString(this._score);
+							mMerge = true;
+						}
+						break;
+					}
+				}
+			}
+		}
+		
+		if (mMerge) {
+			this._addRandomNum();
+			this._checkComplete();
+		}
 	},
 	
+	//上移,x轴不变
 	toUp:function() {
 		Sound._playSelect();
-		this._addRandomNum();
-		cc.log("up");
+		var mMerge = false;
+		
+		for (var i = 0; i < Constants.MAP_COLUMN; i++) {
+			for (var j = Constants.MAP_ROW - 1; j >= 0 ; j--) {
+				for (var j2 = j - 1; j2 >= 0; j2--) {
+					if (this._map[i][j2].getCardNum() > 0) {
+						if (this._map[i][j].getCardNum() == 0) {
+							this._map[i][j].setCardNum(this._map[i][j2].getCardNum());
+							//this._map[i][j]._showBrake("up");
+							if (this._map[i][j].getCardNum() == 0) {
+								this._txtMap[i][j].setString("");
+							} else {
+								this._txtMap[i][j].setString(this._map[i][j2].getCardNum());
+								this._txtMap[i][j].setColor(cc.color(0,0,0));
+							}
+							
+							this._map[i][j2].setCardNum(Constants.CARD_0);
+							this._txtMap[i][j2].setString("");
+							mMerge = true;
+							j--;
+						} else if (this._map[i][j].getCardNum() == this._map[i][j2].getCardNum()) {
+							var mergeNum = parseInt(this._map[i][j].getCardNum());
+							this._map[i][j].setCardNum(mergeNum * 2);
+							this._map[i][j]._showBlink();
+							this._txtMap[i][j].setString(mergeNum * 2);
+							this._txtMap[i][j].setColor(cc.color(0,0,0));
+							this._mergeAction(this._map[i][j]);
+							
+							this._map[i][j2].setCardNum(Constants.CARD_0);
+							this._txtMap[i][j2].setString("");
+							//添加当前分数
+							this._score = this._map[i][j].getCardNum();
+							this._recordText.setString(this._score);
+							mMerge = true;
+						}
+						break;
+					}
+				}
+			}
+		}
+		
+		if (mMerge) {
+			this._addRandomNum();
+			this._checkComplete();
+		}
 	},
 	
+	//下移,x轴不变
 	toDown:function() {
 		Sound._playSelect();
-		this._addRandomNum();
-		cc.log("down");
+		var mMerge = false;
+		
+		for (var i = 0; i < Constants.MAP_COLUMN; i++) {
+			for (var j = 0; j < Constants.MAP_ROW; j++) {
+				for (var j2 = j + 1; j2 < Constants.MAP_COLUMN; j2++) {
+					if (this._map[i][j2].getCardNum() > 0) {
+						if (this._map[i][j].getCardNum() == 0) {
+							this._map[i][j].setCardNum(this._map[i][j2].getCardNum());
+							//this._map[i][j]._showBrake("up");
+							if (this._map[i][j].getCardNum() == 0) {
+								this._txtMap[i][j].setString("");
+							} else {
+								this._txtMap[i][j].setString(this._map[i][j2].getCardNum());
+								this._txtMap[i][j].setColor(cc.color(0,0,0));
+							}
+							
+							this._map[i][j2].setCardNum(Constants.CARD_0);
+							this._txtMap[i][j2].setString("");
+							mMerge = true;
+							j++;
+						} else if (this._map[i][j].getCardNum() == this._map[i][j2].getCardNum()) {
+							var mergeNum = parseInt(this._map[i][j].getCardNum());
+							this._map[i][j].setCardNum(mergeNum * 2);
+							this._map[i][j]._showBlink();
+							this._txtMap[i][j].setString(mergeNum * 2);
+							this._txtMap[i][j].setColor(cc.color(0,0,0));
+							this._mergeAction(this._map[i][j]);
+							
+							this._map[i][j2].setCardNum(Constants.CARD_0);
+							this._txtMap[i][j2].setString("");
+							//添加当前分数
+							this._score = this._map[i][j].getCardNum();
+							this._recordText.setString(this._score);
+							mMerge = true;
+						}
+						break;
+					}
+				}
+			}
+		}
+		
+		if (mMerge) {
+			this._addRandomNum();
+			this._checkComplete();
+		}
 	},
 	
 	update:function() {
@@ -313,6 +445,6 @@ var GameScene = cc.Scene.extend({
 	
 	//合并时的动作效果
 	_mergeAction() {
-		
+		Sound._playMerge();
 	}
 });
