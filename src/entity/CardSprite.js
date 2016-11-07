@@ -71,13 +71,13 @@ var CardSprite = cc.Sprite.extend({
 	},
 	
 	//动画效果(闪烁)
-	_showBlink() {
+	_showBlink:function() {
 		var seq = cc.sequence(cc.scaleTo(0.1, 0.8), cc.scaleTo(0.1, 1));
 		this.runAction(seq);
 	},
 	
 	//刹车效果
-	_showBrake(direction) {
+	_showBrake:function(direction) {
 		var cardX = this.x;
 		var cardY = this.y;
 		var seq = null;

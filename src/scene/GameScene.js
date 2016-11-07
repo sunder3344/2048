@@ -439,12 +439,12 @@ var GameScene = cc.Scene.extend({
 	},
 	
 	//检查游戏是否结束
-	_checkComplete() {
+	_checkComplete:function() {
 		
 	},
 	
 	//合并时的动作效果
-	_mergeAction() {
+	_mergeAction:function() {
 		Sound._playMerge();
 	}
 });
