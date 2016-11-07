@@ -88,7 +88,7 @@ var GameScene = cc.Scene.extend({
 		//新增cube
 		this._addRandomNum();
 		this._addRandomNum();
-		this.scheduleUpdate();
+		//this.scheduleUpdate();
 		
 		//手势识别
 		if ("touches" in cc.sys.capabilities) {
@@ -188,7 +188,7 @@ var GameScene = cc.Scene.extend({
 			currentMap[x][y].number = num;
 			currentMap[x][y]._showBlink();
 			
-			currentTxtMap[x][y].setString(num);
+			currentTxtMap[x][y].setString(num + "");
 			currentTxtMap[x][y].setColor(cc.color(0,0,0));
 		}
 	},
@@ -203,6 +203,23 @@ var GameScene = cc.Scene.extend({
 	//触屏结束
 	_onMainTouchEnded:function(touches, event) {
 		var pos = event.getLocation();
+		var endX = pos.x;
+		var endY = pos.y;
+		this._offsetX = endX - this._x;
+		this._offsetY = endY - this._y;
+		if (Math.abs(this._offsetX) > Math.abs(this._offsetY)) {		//左右滑
+			if (this._offsetX < -Constants.FLING_MIN_DISTANCE) {
+				this.toLeft();
+			} else if (this._offsetX > Constants.FLING_MIN_DISTANCE){
+				this.toRight();
+			}
+		} else {		//上下滑动
+			if (this._offsetY < -Constants.FLING_MIN_DISTANCE) {
+				this.toDown();
+			} else if (this._offsetY > Constants.FLING_MIN_DISTANCE) {
+				this.toUp();
+			}
+		}
 	},
 	
 	//鼠标开始

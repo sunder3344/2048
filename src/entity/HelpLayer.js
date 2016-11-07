@@ -41,7 +41,7 @@ var HelpLayer = cc.Layer.extend({
 				//onTouchesEnded:function(touch, event) {
 				//	_background.removeChild(this);
 				//}
-				onTouchesEnded: this._onTouchEnded.bind(this),
+				onTouchesEnded: this._onTouchEnded.bind(this)
 				//onTouchBegan:function(touch, event) {
 				//	return true;
 				//}
