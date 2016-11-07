@@ -61,7 +61,39 @@ var CardSprite = cc.Sprite.extend({
 		}
 	},
 	
+	setCardNum:function(number) {
+		this.number = number;
+		this.setCardColor(number);
+	},
 	
+	getCardNum:function() {
+		return this.number;
+	},
+	
+	//动画效果(闪烁)
+	_showBlink() {
+		var seq = cc.sequence(cc.scaleTo(0.1, 0.8), cc.scaleTo(0.1, 1));
+		this.runAction(seq);
+	},
+	
+	//刹车效果
+	_showBrake(direction) {
+		var cardX = this.x;
+		var cardY = this.y;
+		var seq = null;
+		if (direction == "left") {
+			seq = cc.sequence(cc.moveTo(0.2, cc.p(cardX - Constants.BRAKE_DISTANCE, cardY)), cc.moveTo(0.2, cc.p(cardX, cardY)));
+		} else if (direction == "right") {
+			
+		} else if (direction == "up") {
+			
+		} else if (direction == "down") {
+			
+		}
+		if (seq != null) {
+			this.runAction(seq);
+		}
+	}
 });
 
 CardSprite.create = function(column, row, number) {

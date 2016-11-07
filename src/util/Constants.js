@@ -5,6 +5,7 @@ var Constants = {
 	CARD_HEIGHT : 90,
 	CARD_GAP : 15,
 	FLING_MIN_DISTANCE : 30,			//手指滑动的最小响应距离
+	BRAKE_DISTANCE : 5,					//动态效果距离
 	
 	CARD_0 : 0,
 	CARD_2 : 2,

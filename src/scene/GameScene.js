@@ -5,6 +5,8 @@ var GameScene = cc.Scene.extend({
 	_helpLayerSwitch:"off",
 	_scoreText:null,
 	_recordText:null,
+	_score:0,
+	_record:0,
 	_panel:null,
 	_panelLayer:null,
 	_map:null,
@@ -184,6 +186,7 @@ var GameScene = cc.Scene.extend({
 			y = UtilityHelper.createRandomIndex(rows);
 			currentMap[x][y].setCardColor(num);
 			currentMap[x][y].number = num;
+			currentMap[x][y]._showBlink();
 			
 			currentTxtMap[x][y].setString(num);
 			currentTxtMap[x][y].setColor(cc.color(0,0,0));
@@ -231,10 +234,54 @@ var GameScene = cc.Scene.extend({
 		}
 	},
 	
+	//左移,y轴不变
 	toLeft:function() {
 		Sound._playSelect();
-		this._addRandomNum();
-		cc.log("left");
+		var mMerge = false;
+		
+		for (var j = 0; j < Constants.MAP_COLUMN; j++) {
+			for (var i = 0; i < Constants.MAP_ROW; i++) {
+				for (var i2 = i + 1; i2 < Constants.MAP_COLUMN; i2++) {
+					if (this._map[i2][j].getCardNum() > 0) {
+						if (this._map[i][j].getCardNum() == 0) {
+							this._map[i][j].setCardNum(this._map[i2][j].getCardNum());
+							//this._map[i][j]._showBrake("left");
+							if (this._map[i][j].getCardNum() == 0) {
+								this._txtMap[i][j].setString("");
+							} else {
+								this._txtMap[i][j].setString(this._map[i2][j].getCardNum());
+								this._txtMap[i][j].setColor(cc.color(0,0,0));
+							}
+							
+							this._map[i2][j].setCardNum(Constants.CARD_0);
+							this._txtMap[i2][j].setString("");
+							mMerge = true;
+							i++;
+						} else if (this._map[i][j].getCardNum() == this._map[i2][j].getCardNum()) {
+							var mergeNum = parseInt(this._map[i][j].getCardNum());
+							this._map[i][j].setCardNum(mergeNum * 2);
+							this._map[i][j]._showBlink();
+							this._txtMap[i][j].setString(mergeNum * 2);
+							this._txtMap[i][j].setColor(cc.color(0,0,0));
+							this._mergeAction(this._map[i][j]);
+							
+							this._map[i2][j].setCardNum(Constants.CARD_0);
+							this._txtMap[i2][j].setString("");
+							//添加当前分数
+							this._score = this._map[i][j].getCardNum();
+							this._recordText.setString(this._score);
+							mMerge = true;
+						}
+						break;
+					}
+				}
+			}
+		}
+		
+		if (mMerge) {
+			this._addRandomNum();
+			this._checkComplete();
+		}
 	},
 	
 	toRight:function() {
@@ -257,5 +304,15 @@ var GameScene = cc.Scene.extend({
 	
 	update:function() {
 		//cc.log('111');
+	},
+	
+	//检查游戏是否结束
+	_checkComplete() {
+		
+	},
+	
+	//合并时的动作效果
+	_mergeAction() {
+		
 	}
 });
