@@ -93,9 +93,9 @@ var GameScene = cc.Scene.extend({
 		//手势识别
 		if ("touches" in cc.sys.capabilities) {
 			cc.eventManager.addListener({
-				event: cc.EventListener.TOUCH_ALL_AT_ONCE,
-				onTouchesBegan: this._onMainTouchBegan.bind(this),
-				onTouchesEnded: this._onMainTouchEnded.bind(this),
+				event: cc.EventListener.TOUCH_ONE_BY_ONE,
+				onTouchBegan: this._onMainTouchBegan.bind(this),
+				onTouchEnded: this._onMainTouchEnded.bind(this)
 			}, this);
 		} else {
 			cc.eventManager.addListener({
@@ -154,7 +154,7 @@ var GameScene = cc.Scene.extend({
 	},
 	
 	_exit:function() {
-		cc.log("exit");
+		cc.director.end();
 	},
 	
 	//获取随机位置
@@ -194,15 +194,16 @@ var GameScene = cc.Scene.extend({
 	},
 	
 	//触屏开始
-	_onMainTouchBegan:function(touches, event) {
-		var pos = event.getLocation();
+	_onMainTouchBegan:function(touch, event) {
+		var pos = touch.getLocation();
 		this._x = pos.x;
 		this._y = pos.y;
+		return true;
 	},
 	
 	//触屏结束
-	_onMainTouchEnded:function(touches, event) {
-		var pos = event.getLocation();
+	_onMainTouchEnded:function(touch, event) {
+		var pos = touch.getLocation();
 		var endX = pos.x;
 		var endY = pos.y;
 		this._offsetX = endX - this._x;

@@ -38,10 +38,11 @@ var HelpLayer = cc.Layer.extend({
 			layerListener = cc.EventListener.create({
 				event: cc.EventListener.TOUCH_ONE_BY_ONE,
 				swallowTouches: true,
-				//onTouchesEnded:function(touch, event) {
+				//onTouchEnded:function(touch, event) {
 				//	_background.removeChild(this);
 				//}
-				onTouchesEnded: this._onTouchEnded.bind(this)
+				onTouchBegan: this._onTouchEnded.bind(this),
+				//onTouchEnded: this._onTouchEnded.bind(this)
 				//onTouchBegan:function(touch, event) {
 				//	return true;
 				//}
@@ -72,7 +73,7 @@ var HelpLayer = cc.Layer.extend({
 	
 	_onTouchEnded:function(touches, event) {
 		this.flag++;
-		if (this.flag > 0) {
+		if (this.flag >= 0) {
 			if (this._layerSwitch == "on") {
 				this._background.removeChild(this);
 				this._gameScene._helpBtn.setEnabled(true);
