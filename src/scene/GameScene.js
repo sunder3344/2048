@@ -78,7 +78,9 @@ var GameScene = cc.Scene.extend({
 		this._scoreText.x = scoreTab.x;
 		this._scoreText.y = scoreTab.y - 15;
 		
-		this._recordText = new cc.LabelBMFont("0", res.FONT_FNT);
+		var highestRecord = Storage.getCurrentHighest();
+		this._record = highestRecord;
+		this._recordText = new cc.LabelBMFont(highestRecord.toString(), res.FONT_FNT);
 		this._recordText.scale = 0.6;
 		this._background.addChild(this._recordText, 2);
 		this._recordText.x = recordTab.x;
@@ -286,8 +288,7 @@ var GameScene = cc.Scene.extend({
 							this._map[i2][j].setCardNum(Constants.CARD_0);
 							this._txtMap[i2][j].setString("");
 							//添加当前分数
-							this._score = this._map[i][j].getCardNum();
-							this._recordText.setString(this._score);
+							this._updateScore(this._map[i][j].getCardNum());
 							mMerge = true;
 						}
 						break;
@@ -336,8 +337,7 @@ var GameScene = cc.Scene.extend({
 							this._map[i2][j].setCardNum(Constants.CARD_0);
 							this._txtMap[i2][j].setString("");
 							//添加当前分数
-							this._score = this._map[i][j].getCardNum();
-							this._recordText.setString(this._score);
+							this._updateScore(this._map[i][j].getCardNum());
 							mMerge = true;
 						}
 						break;
@@ -386,8 +386,7 @@ var GameScene = cc.Scene.extend({
 							this._map[i][j2].setCardNum(Constants.CARD_0);
 							this._txtMap[i][j2].setString("");
 							//添加当前分数
-							this._score = this._map[i][j].getCardNum();
-							this._recordText.setString(this._score);
+							this._updateScore(this._map[i][j].getCardNum());
 							mMerge = true;
 						}
 						break;
@@ -436,8 +435,7 @@ var GameScene = cc.Scene.extend({
 							this._map[i][j2].setCardNum(Constants.CARD_0);
 							this._txtMap[i][j2].setString("");
 							//添加当前分数
-							this._score = this._map[i][j].getCardNum();
-							this._recordText.setString(this._score);
+							this._updateScore(this._map[i][j].getCardNum());
 							mMerge = true;
 						}
 						break;
@@ -454,6 +452,21 @@ var GameScene = cc.Scene.extend({
 	
 	update:function() {
 		//cc.log('111');
+	},
+	
+	//更新分数
+	_updateScore:function(score) {
+		//首先查看
+		if (this._score < score) {
+			this._score = score;
+			this._scoreText.setString(this._score);
+		}
+		//记录最高分
+		if (this._score > this._record) {
+			this._record = this._score;
+			this._recordText.setString(this._record);
+			Storage.setCurrentHighest(this._record);
+		}
 	},
 	
 	//检查游戏是否结束
