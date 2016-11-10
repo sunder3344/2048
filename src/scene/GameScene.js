@@ -458,7 +458,30 @@ var GameScene = cc.Scene.extend({
 	
 	//检查游戏是否结束
 	_checkComplete:function() {
+		//出现2048即胜利
+		for (var i = 0; i < Constants.MAP_COLUMN; i++) {
+			for (var j = 0; j < Constants.MAP_ROW; j++) {
+				if (this._map[i][j].getCardNum() == Constants.CARD_2048) {
+					//显示胜利layer
+					cc.log("win");
+					return;
+				}
+			}
+		}
 		
+		//已经填满且不能再合并时提示
+		for (var j = 0; j < Constants.MAP_ROW; j++) {
+			for (var i = 0; i < Constants.MAP_COLUMN; i++) {
+				if (this._map[i][j].getCardNum() <= 0
+					|| (i > 0 && this._map[i][j].getCardNum() == this._map[i-1][j].getCardNum())
+					|| (i < Constants.MAP_COLUMN - 1 && this._map[i][j].getCardNum() == this._map[i+1][j].getCardNum())
+					|| (j > 0 && this._map[i][j].getCardNum() == this._map[i][j-1].getCardNum()) 
+					|| (j < Constants.MAP_ROW - 1 && this._map[x][y].getCardNum() == this._map[x][j+1].getCardNum())) {
+					return;
+				}
+			}
+		}
+		cc.log("lose");
 	},
 	
 	//合并时的动作效果
