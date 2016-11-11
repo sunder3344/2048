@@ -1,20 +1,23 @@
 var Sound = {
-	silence:false,
+	silence:"on",
 	
 	_playMerge:function() {
-		if (!Sound.silence) {
+		Sound.silence = Storage.getCurrentSound();
+		if (Sound.silence == "on") {
 			cc.audioEngine.playEffect(res.MERGE_MP3, false);
 		}
 	},
 	
 	_playSelect:function() {
-		if (!Sound.silence) {
+		Sound.silence = Storage.getCurrentSound();
+		if (Sound.silence == "on") {
 			cc.audioEngine.playEffect(res.SELECT_MP3, false);
 		}
 	},
 	
 	_playSetpos:function() {
-		if (!Sound.silence) {
+		Sound.silence = Storage.getCurrentSound();
+		if (Sound.silence == "on") {
 			cc.audioEngine.playEffect(res.SETPOS_MP3, false);
 		}
 	}
