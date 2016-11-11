@@ -3,8 +3,11 @@ var GameScene = cc.Scene.extend({
 	_exitBtn:null,
 	_background:null,
 	_helpLayerSwitch:"off",
+	_soundSwitch:"on",
 	_scoreText:null,
 	_recordText:null,
+	_soundOn:null,				//静音按钮
+	_soundOff:null,
 	_score:0,
 	_record:0,
 	_panel:null,
@@ -32,21 +35,41 @@ var GameScene = cc.Scene.extend({
 		
 		//logo
 		var logo = new cc.Sprite("#logo.gif");
-		logo.x = this._background.width / 2 - 140;
+		logo.x = this._background.width / 2 - 150;
 		logo.y = this._background.height / 2 + 260;
 		this._background.addChild(logo, 2);
 		
 		//score
 		var scoreTab = new cc.Sprite("#score.gif");
-		scoreTab.x = logo.x + logo.width / 2 + 80;
+		scoreTab.x = logo.x + logo.width / 2 + 70;
 		scoreTab.y = logo.y + 10;
 		this._background.addChild(scoreTab, 2);
 		
 		//record
 		var recordTab = new cc.Sprite("#record.gif");
-		recordTab.x = scoreTab.x + logo.width / 2 + 70;
+		recordTab.x = scoreTab.x + logo.width / 2 + 60;
 		recordTab.y = scoreTab.y;
 		this._background.addChild(recordTab, 2);
+		
+		//sound button(默认显示声音,如果静音已经设置过，则显示静音)
+		this._soundSwitch = Storage.getCurrentSound();
+		this._soundOn = new cc.MenuItemImage(res.SOUND_ON, res.SOUND_ON, this._soundSwitchOn, this);
+		this._soundOn.scale = 0.4;
+		
+		this._soundOff = new cc.MenuItemImage(res.SOUND_OFF, res.SOUND_OFF, this._soundSwitchOff, this);
+		this._soundOff.scale = 0.4;
+		this._soundOff.setVisible(false);
+		var soundMenu = new cc.Menu(this._soundOn, this._soundOff);
+		this._background.addChild(soundMenu, 2);
+		soundMenu.x = recordTab.x + logo.width / 2 + 20;
+		soundMenu.y = scoreTab.y;
+		if (this._soundSwitch == "on") {
+			this._soundOn.setVisible(true);
+			this._soundOff.setVisible(false);
+		} else if (this._soundSwitch == "off") {
+			this._soundOn.setVisible(false);
+			this._soundOff.setVisible(true);
+		}
 		
 		//panel
 		this._panel = new cc.Sprite("#panel.gif");
@@ -78,11 +101,16 @@ var GameScene = cc.Scene.extend({
 		this._scoreText.x = scoreTab.x;
 		this._scoreText.y = scoreTab.y - 15;
 		
-		this._recordText = new cc.LabelBMFont("0", res.FONT_FNT);
+		var highestRecord = Storage.getCurrentHighest();
+		this._record = highestRecord;
+		this._recordText = new cc.LabelBMFont(highestRecord.toString(), res.FONT_FNT);
 		this._recordText.scale = 0.6;
 		this._background.addChild(this._recordText, 2);
 		this._recordText.x = recordTab.x;
 		this._recordText.y = recordTab.y - 15;
+		
+		//音量键事件
+		
 		
 		this._init();
 		//新增cube
@@ -286,8 +314,7 @@ var GameScene = cc.Scene.extend({
 							this._map[i2][j].setCardNum(Constants.CARD_0);
 							this._txtMap[i2][j].setString("");
 							//添加当前分数
-							this._score = this._map[i][j].getCardNum();
-							this._recordText.setString(this._score);
+							this._updateScore(this._map[i][j].getCardNum());
 							mMerge = true;
 						}
 						break;
@@ -336,8 +363,7 @@ var GameScene = cc.Scene.extend({
 							this._map[i2][j].setCardNum(Constants.CARD_0);
 							this._txtMap[i2][j].setString("");
 							//添加当前分数
-							this._score = this._map[i][j].getCardNum();
-							this._recordText.setString(this._score);
+							this._updateScore(this._map[i][j].getCardNum());
 							mMerge = true;
 						}
 						break;
@@ -386,8 +412,7 @@ var GameScene = cc.Scene.extend({
 							this._map[i][j2].setCardNum(Constants.CARD_0);
 							this._txtMap[i][j2].setString("");
 							//添加当前分数
-							this._score = this._map[i][j].getCardNum();
-							this._recordText.setString(this._score);
+							this._updateScore(this._map[i][j].getCardNum());
 							mMerge = true;
 						}
 						break;
@@ -436,8 +461,7 @@ var GameScene = cc.Scene.extend({
 							this._map[i][j2].setCardNum(Constants.CARD_0);
 							this._txtMap[i][j2].setString("");
 							//添加当前分数
-							this._score = this._map[i][j].getCardNum();
-							this._recordText.setString(this._score);
+							this._updateScore(this._map[i][j].getCardNum());
 							mMerge = true;
 						}
 						break;
@@ -456,36 +480,44 @@ var GameScene = cc.Scene.extend({
 		//cc.log('111');
 	},
 	
+	//更新分数
+	_updateScore:function(score) {
+		//首先查看
+		if (this._score < score) {
+			this._score = score;
+			this._scoreText.setString(this._score);
+		}
+		//记录最高分
+		if (this._score > this._record) {
+			this._record = this._score;
+			this._recordText.setString(this._record);
+			Storage.setCurrentHighest(this._record);
+		}
+	},
+	
 	//检查游戏是否结束
 	_checkComplete:function() {
-		//出现2048即胜利
-		for (var i = 0; i < Constants.MAP_COLUMN; i++) {
-			for (var j = 0; j < Constants.MAP_ROW; j++) {
-				if (this._map[i][j].getCardNum() == Constants.CARD_2048) {
-					//显示胜利layer
-					cc.log("win");
-					return;
-				}
-			}
-		}
 		
-		//已经填满且不能再合并时提示
-		for (var j = 0; j < Constants.MAP_ROW; j++) {
-			for (var i = 0; i < Constants.MAP_COLUMN; i++) {
-				if (this._map[i][j].getCardNum() <= 0
-					|| (i > 0 && this._map[i][j].getCardNum() == this._map[i-1][j].getCardNum())
-					|| (i < Constants.MAP_COLUMN - 1 && this._map[i][j].getCardNum() == this._map[i+1][j].getCardNum())
-					|| (j > 0 && this._map[i][j].getCardNum() == this._map[i][j-1].getCardNum()) 
-					|| (j < Constants.MAP_ROW - 1 && this._map[x][y].getCardNum() == this._map[x][j+1].getCardNum())) {
-					return;
-				}
-			}
-		}
-		cc.log("lose");
 	},
 	
 	//合并时的动作效果
 	_mergeAction:function() {
 		Sound._playMerge();
-	}
+	},
+	
+	//关闭声音
+	_soundSwitchOn:function() {
+		this._soundOff.setVisible(true);
+		this._soundOn.setVisible(false);
+		this._soundSwitch = "off";
+		Storage.setCurrentSound("off");
+	},
+	
+	//开启声音
+	_soundSwitchOff:function() {
+		this._soundOff.setVisible(false);
+		this._soundOn.setVisible(true);
+		this._soundSwitch = "on";
+		Storage.setCurrentSound("on");
+	},
 });
