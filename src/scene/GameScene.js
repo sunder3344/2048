@@ -507,7 +507,6 @@ var GameScene = cc.Scene.extend({
 	
 	//关闭声音
 	_soundSwitchOn:function() {
-		cc.log("on");
 		this._soundOff.setVisible(true);
 		this._soundOn.setVisible(false);
 		this._soundSwitch = "off";
@@ -516,7 +515,6 @@ var GameScene = cc.Scene.extend({
 	
 	//开启声音
 	_soundSwitchOff:function() {
-		cc.log("off");
 		this._soundOff.setVisible(false);
 		this._soundOn.setVisible(true);
 		this._soundSwitch = "on";
