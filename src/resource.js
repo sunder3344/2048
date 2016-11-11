@@ -3,6 +3,8 @@ var res = {
     IMG_PNG : "res/img/img.png",
 	SOUND_ON : "res/img/sound_on.png",
 	SOUND_OFF : "res/img/sound_off.png",
+	RETRY_PNG : "res/img/retry.png",
+	EXIT_PNG : "res/img/exit.png",
 	IMG_PLIST : "res/img/img.plist",
 	MERGE_MP3 : "res/music/merge.mp3",
 	SELECT_MP3 : "res/music/select.mp3",

@@ -18,6 +18,7 @@ var GameScene = cc.Scene.extend({
 	_y:null,
 	_offsetX:null,
 	_offsetY:null,
+	_maskClipper:null,
 	
 	ctor:function() {
 		this._super();
@@ -90,7 +91,7 @@ var GameScene = cc.Scene.extend({
 		this._exitBtn.x = this._helpBtn.x + this._helpBtn.width + 20;
 		this._exitBtn.y = this._exitBtn.height + 15;
 		var menu = new cc.Menu(this._helpBtn, this._exitBtn);
-		menu.x = this._background.width / 2 - 210;
+		menu.x = this._background.width / 2 - 200;
 		menu.y = this._helpBtn.height + 55;
 		this._background.addChild(menu, 2);
 		
@@ -325,8 +326,8 @@ var GameScene = cc.Scene.extend({
 		
 		if (mMerge) {
 			this._addRandomNum();
-			this._checkComplete();
 		}
+		this._checkComplete();
 	},
 	
 	//右移,y轴不变
@@ -374,8 +375,8 @@ var GameScene = cc.Scene.extend({
 		
 		if (mMerge) {
 			this._addRandomNum();
-			this._checkComplete();
 		}
+		this._checkComplete();
 	},
 	
 	//上移,x轴不变
@@ -423,8 +424,8 @@ var GameScene = cc.Scene.extend({
 		
 		if (mMerge) {
 			this._addRandomNum();
-			this._checkComplete();
 		}
+		this._checkComplete();
 	},
 	
 	//下移,x轴不变
@@ -472,8 +473,8 @@ var GameScene = cc.Scene.extend({
 		
 		if (mMerge) {
 			this._addRandomNum();
-			this._checkComplete();
 		}
+		this._checkComplete();
 	},
 	
 	update:function() {
@@ -502,7 +503,7 @@ var GameScene = cc.Scene.extend({
 			for (var j = 0; j < Constants.MAP_ROW; j++) {
 				if (this._map[i][j].getCardNum() == Constants.CARD_2048) {
 					//显示胜利layer
-					cc.log("win");
+					this._showDialog(Constants.GAME_SUCCES);
 					return;
 				}
 			}
@@ -520,7 +521,25 @@ var GameScene = cc.Scene.extend({
 				}
 			}
 		}
-		cc.log("lose");
+		this._showDialog(Constants.GAME_FAILED);
+	},
+	
+	_showDialog:function(content) {
+		//遮罩层
+		var winSize = cc.director.getWinSize();
+		this._maskClipper = new cc.ClippingNode();
+		this._maskClipper.attr({
+			width : winSize.width,
+			height : winSize.height,
+			anchorX : 0.5,
+			anchorY : 0.5,
+			x : winSize.width / 2,
+			y : winSize.height / 2
+		});
+		this._maskClipper.alphaThreshold = 0.05;
+		
+		var dialogLayer = new DialogLayer(this, content);
+		this._background.addChild(dialogLayer, 4);
 	},
 	
 	//合并时的动作效果

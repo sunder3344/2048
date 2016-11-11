@@ -6,6 +6,8 @@ var Constants = {
 	CARD_GAP : 15,
 	FLING_MIN_DISTANCE : 30,			//手指滑动的最小响应距离
 	BRAKE_DISTANCE : 5,					//动态效果距离
+	GAME_FAILED : "你并没有拼出2048，\n别灰心，继续努力哦，\n据说全世界只有\n3%的人能拼出2048，\n再来一局吧，看好你哟！",
+	GAME_SUCCES : "你拼出了2048，\n实在是太厉害了！\n小伙伴们都惊呆了！",
 	
 	CARD_0 : 0,
 	CARD_2 : 2,

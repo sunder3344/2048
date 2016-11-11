@@ -16,19 +16,6 @@ var HelpLayer = cc.Layer.extend({
 		this.addChild(this._helpPanel, 1);
 		this._helpPanel.x = this._background.width / 2;
 		this._helpPanel.y = this._background.height / 2 - 50;
-		
-		/*if ("touches" in cc.sys.capabilities) {
-			cc.eventManager.addListener({event: cc.EventListener.TOUCH_ALL_AT_ONCE, onTouchesEnded: this._onTouchEnded.bind(this)}, this);
-		} else {
-			cc.eventManager.addListener({event: cc.EventListener.MOUSE, onMouseUp: this._onMouseUp.bind(this)}, this);
-		}*/
-		
-		//增加menuItem
-		//this._exitBtn = new cc.MenuItemImage(res.CROSS_JPG, res.CROSS_JPG, this._helpExit());
-		//this.addChild(this._exitBtn, 1);
-		//this._exitBtn.scale = 0.05;
-		//this._exitBtn.x = this._helpPanel.x + this._helpPanel.width / 2 - 30;
-		//this._exitBtn.y = this._helpPanel.y + this._helpPanel.height / 2 - 30;
 	},
 	
 	onEnter:function() {

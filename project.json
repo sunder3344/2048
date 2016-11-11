@@ -9,7 +9,7 @@
     "renderMode" : 0,
     "engineDir":"frameworks/cocos2d-html5",
 
-    "modules" : ["core", "menus", "actions", "labels", "audio", "ccpool"],
+    "modules" : ["core", "clipping-nodes", "menus", "actions", "labels", "audio", "ccpool"],
 
     "jsList" : [
         "src/resource.js",
@@ -19,6 +19,7 @@
 		"src/util/UtilityHelper.js",
         "src/scene/GameScene.js",
 		"src/entity/HelpLayer.js",
+		"src/entity/DialogLayer.js",
 		"src/entity/CardSprite.js"
     ]
 }
