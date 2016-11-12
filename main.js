@@ -66,8 +66,8 @@ cc.game.onStart = function(){
     //cc.view.setOrientation(cc.ORIENTATION_PORTRAIT);
 
     // Setup the resolution policy and design resolution size
-    cc.view.setDesignResolutionSize(960, 640, cc.ResolutionPolicy.SHOW_ALL);			//横屏
-	//cc.view.setDesignResolutionSize(640, 960, cc.ResolutionPolicy.NO_BORDER);			//竖屏
+    //cc.view.setDesignResolutionSize(960, 640, cc.ResolutionPolicy.SHOW_ALL);			//横屏
+	cc.view.setDesignResolutionSize(640, 960, cc.ResolutionPolicy.NO_BORDER);			//竖屏
 
     // The game will be resized when browser size change
     cc.view.resizeWithBrowserSize(true);

@@ -534,19 +534,8 @@ var GameScene = cc.Scene.extend({
 	_showDialog:function(content) {
 		//设定结束值
 		this._result = "stop";
-		//遮罩层
-		var winSize = cc.director.getWinSize();
-		this._maskClipper = new cc.ClippingNode();
-		this._maskClipper.attr({
-			width : winSize.width,
-			height : winSize.height,
-			anchorX : 0.5,
-			anchorY : 0.5,
-			x : winSize.width / 2,
-			y : winSize.height / 2
-		});
-		this._maskClipper.alphaThreshold = 0.05;
-		
+		this._helpBtn.setEnabled(false);
+		this._exitBtn.setEnabled(false);
 		var dialogLayer = new DialogLayer(this, content);
 		this._background.addChild(dialogLayer, 4);
 	},

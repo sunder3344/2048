@@ -13,8 +13,21 @@ var DialogLayer = cc.Layer.extend({
 		
 		this._gameScene = gameScene;
 		this._background = gameScene._background;
+		//mask(竖屏和横屏不一样)
+		var distance = 80;
+		if ("touches" in cc.sys.capabilities) {
+			distance = 80;
+		} else {
+			distance = 230;
+		}
+		var mask = new cc.Sprite("#background.gif");
+		winSize = cc.director.getWinSize();
+		mask.x = this._gameScene._background.x - distance;
+		mask.y = this._gameScene._background.y;
+		this.addChild(mask, 1);
+		
 		this._dialogPanel = new cc.Sprite("#panel.gif");
-		this.addChild(this._dialogPanel, 1);
+		this.addChild(this._dialogPanel, 2);
 		this._dialogPanel.x = this._background.width / 2;
 		this._dialogPanel.y = this._background.height / 2 - 20;
 		
