@@ -19,6 +19,7 @@ var GameScene = cc.Scene.extend({
 	_offsetX:null,
 	_offsetY:null,
 	_maskClipper:null,
+	_result:"continue",
 	
 	ctor:function() {
 		this._super();
@@ -232,6 +233,9 @@ var GameScene = cc.Scene.extend({
 	
 	//触屏结束
 	_onMainTouchEnded:function(touch, event) {
+		if (this._result == "stop") {
+			return;
+		}
 		var pos = touch.getLocation();
 		var endX = pos.x;
 		var endY = pos.y;
@@ -261,6 +265,9 @@ var GameScene = cc.Scene.extend({
 	
 	//鼠标结束
 	_onMainMouseUp:function(event) {
+		if (this._result == "stop") {
+			return;
+		}
 		var pos = event.getLocation();
 		var endX = pos.x;
 		var endY = pos.y;
@@ -525,6 +532,8 @@ var GameScene = cc.Scene.extend({
 	},
 	
 	_showDialog:function(content) {
+		//设定结束值
+		this._result = "stop";
 		//遮罩层
 		var winSize = cc.director.getWinSize();
 		this._maskClipper = new cc.ClippingNode();

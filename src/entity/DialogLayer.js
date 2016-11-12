@@ -12,7 +12,6 @@ var DialogLayer = cc.Layer.extend({
 		this._super();
 		
 		this._gameScene = gameScene;
-		cc.log(this._gameScene);
 		this._background = gameScene._background;
 		this._dialogPanel = new cc.Sprite("#panel.gif");
 		this.addChild(this._dialogPanel, 1);
