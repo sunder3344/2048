@@ -8,11 +8,11 @@ var Anysdk = {
 
 	_init:function() {
 		//init
-		this.agent = anysdk.agentManager;
+		this.agent = anysdk.AgentManager.getInstance();
 		this.agent.init(this.appKey, this.appSecret, this.privateKey, this.oauthLoginServer);
+		return this.agent;
 		//load
 		//Android建议 在onCreate 里调用 PluginWrapper.loadAllPlugins()；来进行插件初始化
-		//agent.loadAllPlugins();
 	},
 	
 	//用户系统
@@ -35,7 +35,9 @@ var Anysdk = {
 	
 	//广告系统
 	_adsPlugin:function() {
-		this._init();
+		if (this.agent == null) {
+			this._init();
+		}
 		var ads_plugin = this.agent.getAdsPlugin();               	//广告系统
 		return ads_plugin;
 	},
@@ -54,8 +56,9 @@ var Anysdk = {
 	
 	//统计系统
 	_analyticsPlugin:function() {
-		//this._init();
-		//var analytics_plugin = this.agent.getAnalyticsPlugin();    //统计系统
+		this._init();
+		var analytics_plugin = this.agent.getAnalyticsPlugin();    //统计系统
+		return analytics_plugin;
 	},
 	
 	//崩溃分析系统

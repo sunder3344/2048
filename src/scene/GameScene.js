@@ -20,6 +20,9 @@ var GameScene = cc.Scene.extend({
 	_offsetY:null,
 	_maskClipper:null,
 	_result:"continue",
+	_agent:null,
+	_ads_plugin:null,
+	_analytics_plugin:null,
 	
 	ctor:function() {
 		this._super();
@@ -115,6 +118,7 @@ var GameScene = cc.Scene.extend({
 		
 		
 		this._init();
+		this._sdk_init();
 		//新增cube
 		this._addRandomNum();
 		this._addRandomNum();
@@ -136,6 +140,48 @@ var GameScene = cc.Scene.extend({
 		}
 		return true;
 	},
+	
+	_sdk_init:function() {
+		/*var appKey = "E0CC2770-DB8E-F416-7358-7173732331DF";
+		var appSecret = "9c96c3c5e274ef05e5159ced456741d3";
+		var privateKey = "76F4F9CECD0BFD289407E964D8062289";
+		var oauthLoginServer = "http://oauth.anysdk.com/api/OauthLoginDemo/Login.php";
+		var agent = anysdk.AgentManager.getInstance();
+		//init
+		agent.init(appKey,appSecret,privateKey,oauthLoginServer);
+		var ads_plugin = agent.getAdsPlugin();               //广告系统
+		cc.log("=========================================================");
+		cc.log(ads_plugin);
+		cc.log(typeof(ads_plugin));
+		//ads_plugin.setListener(this.onActionResult, this);
+		var temp = ads_plugin.showAds(AdsType.AD_TYPE_BANNER);
+		cc.log("=========================================================");
+		var analytics_plugin = agent.getAnalyticsPlugin();
+		cc.log(analytics_plugin);
+		cc.log(typeof(analytics_plugin));
+		analytics_plugin.startSession();
+		cc.log("=========================================================");
+		var version = agent.getFrameworkVersion();
+		var channelID = agent.getChannelId();
+		var customParam = agent.getCustomParam();
+		cc.log(version);
+		cc.log(channelID);
+		cc.log(customParam);
+		cc.log(ads_plugin);*/
+		this._agent = Anysdk._init();
+		this._ads_plugin = this._agent.getAdsPlugin();
+		this._ads_plugin.showAds(AdsType.AD_TYPE_BANNER);			//显示banner广告
+		//cc.log(this._ads_plugin);
+		//开始统计
+		this._analytics_plugin = this._agent.getAnalyticsPlugin();
+		this._analytics_plugin.startSession();
+		this._analytics_plugin.setCaptureUncaughtException(true);			//收集应用错误日志
+		//cc.log(this._analytics_plugin);
+	},
+	
+	//onAdsResult:function(code, msg) {
+		//cc.log("on ads result.")
+	//},
 	
 	//初始化16个格子
 	_init:function() {
@@ -184,6 +230,10 @@ var GameScene = cc.Scene.extend({
 	},
 	
 	_exit:function() {
+		this._analytics_plugin.stopSession();
+		cc.log("--------------------------");
+		cc.log(this._analytics_plugin);
+		cc.log("--------------------------");
 		cc.director.end();
 	},
 	

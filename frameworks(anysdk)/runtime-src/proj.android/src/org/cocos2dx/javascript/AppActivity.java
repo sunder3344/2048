@@ -36,16 +36,8 @@ import com.anysdk.framework.PluginWrapper;
 public class AppActivity extends Cocos2dxActivity {
 	
     @Override
-    public Cocos2dxGLSurfaceView onCreateView() {
-        Cocos2dxGLSurfaceView glSurfaceView = new Cocos2dxGLSurfaceView(this);
-        // TestCpp should create stencil buffer
-        glSurfaceView.setEGLConfigChooser(5, 6, 5, 0, 16, 8);
-
-        return glSurfaceView;
-    }
-    
-    @Override
-	protected void onCreate(Bundle savedState) {
+	protected void onCreate(Bundle savedState)
+    {
         super.onCreate(savedState);
         PluginWrapper.init(this); // for plugins
         PluginWrapper.setGLSurfaceView(Cocos2dxGLSurfaceView.getInstance());

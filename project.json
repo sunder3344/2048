@@ -9,14 +9,17 @@
     "renderMode" : 0,
     "engineDir":"frameworks/cocos2d-html5",
 
-    "modules" : ["menus", "actions", "labels", "audio", "ccpool"],
+    "modules" : ["core", "menus", "actions", "labels", "audio", "ccpool"],
 
     "jsList" : [
         "src/resource.js",
+		"src/anysdk/jsb_anysdk.js",
+		"src/anysdk/jsb_anysdk_constants.js",
 		"src/util/Sound.js",
 		"src/util/Storage.js",
 		"src/util/Constants.js",
 		"src/util/UtilityHelper.js",
+		"src/util/Anysdk.js",
         "src/scene/GameScene.js",
 		"src/entity/HelpLayer.js",
 		"src/entity/DialogLayer.js",
